@@ -21,7 +21,7 @@ intellij {
 }
 
 group 'com.you'
-version '0.8.10' //  # RwRender: version '{{ ctx.version }}' //
+version '2.0.6'
 
 repositories {
   mavenCentral()
@@ -44,8 +44,8 @@ repositories {
 }
 
 def remoteRobotVersion = "0.11.16"
-def intellijVersion = "2022.2.3" //  # RwRender: def intellijVersion = "{{ ctx.intellij_version }}" //
-def intellijPro = false  //  # RwRender: def intellijPro = {{ ctx.pro }}  //
+def intellijVersion = "2022.2.3"
+def intellijPro = false
 
 
 dependencies {
