@@ -143,7 +143,7 @@ publishPlugin {
 }
 
 runPluginVerifier {
-  ideVersions = ["IU-222.3739.54", "IU-211.7628.21", "IU-212.5712.43 ", "IU-213.7172.25", "IU-221.5080.93", "IU-203.8084.24"]
+  ideVersions = ["IU-223.7571.4", "IU-222.3739.54", "IU-211.7628.21", "IU-212.5712.43 ", "IU-213.7172.25", "IU-221.5080.93", "IU-203.8084.24"]
 }
 
 tasks.processResources {

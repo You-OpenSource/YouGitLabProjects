@@ -1,15 +1,19 @@
 package com.github.yougitlabprojects.util;
 
+import com.intellij.diagnostic.ActivityCategory;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.*;
 import com.intellij.openapi.components.BaseComponent;
 import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.extensions.PluginDescriptor;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.util.messages.MessageBus;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.picocontainer.ComponentAdapter;
@@ -35,12 +39,10 @@ public class DummyApplication implements Application {
     this.service = service;
   }
 
-    @Override
     public boolean acquireWriteIntentLockIfNeeded() {
         return false;
     }
 
-    @Override
     public void releaseWriteIntentLockIfNeeded(boolean needed) {
 
     }
@@ -60,12 +62,10 @@ public class DummyApplication implements Application {
 
     }
 
-    @Override
     public <T, E extends Throwable> T runUnlockingIntendedWrite(@NotNull ThrowableComputable<T, E> action) throws E {
         return null;
     }
 
-    @Override
     public void runIntendedWriteActionOnCurrentThread(@NotNull Runnable action) {
 
     }
@@ -116,11 +116,21 @@ public class DummyApplication implements Application {
   }
 
   @Override
+  public void assertReadAccessNotAllowed() {
+
+  }
+
+  @Override
   public void assertIsDispatchThread() {
 
   }
 
-    @Override
+  @Override
+  public void assertIsNonDispatchThread() {
+
+  }
+
+  @Override
     public void assertIsWriteThread() {
 
     }
@@ -331,7 +341,6 @@ public class DummyApplication implements Application {
     return null;
   }
 
-  @Override
   public <T> T getComponent(@NotNull Class<T> aClass, T t) {
     return null;
   }
@@ -361,7 +370,6 @@ public class DummyApplication implements Application {
         return null;
       }
 
-      @Override
       public PicoContainer getParent() {
         return null;
       }
@@ -371,17 +379,14 @@ public class DummyApplication implements Application {
         return null;
       }
 
-      @Override
       public ComponentAdapter getComponentAdapterOfType(Class aClass) {
         return null;
       }
 
-      @Override
       public Collection getComponentAdapters() {
         return null;
       }
 
-      @Override
       public List getComponentAdaptersOfType(Class aClass) {
         return null;
       }
@@ -390,6 +395,11 @@ public class DummyApplication implements Application {
 
 
     };
+  }
+
+  @Override
+  public boolean isInjectionForExtensionSupported() {
+    return false;
   }
 
   @NotNull
@@ -412,6 +422,41 @@ public class DummyApplication implements Application {
   @NotNull
   @Override
   public Condition getDisposed() {
+    return null;
+  }
+
+  @Override
+  public <T> T getService(@NotNull Class<T> serviceClass) {
+    return null;
+  }
+
+  @Override
+  public <T> T instantiateClassWithConstructorInjection(@NotNull Class<T> aClass, @NotNull Object key, @NotNull PluginId pluginId) {
+    return null;
+  }
+
+  @Override
+  public @NotNull RuntimeException createError(@NotNull Throwable error, @NotNull PluginId pluginId) {
+    return null;
+  }
+
+  @Override
+  public @NotNull RuntimeException createError(@NotNull @NonNls String message, @NotNull PluginId pluginId) {
+    return null;
+  }
+
+  @Override
+  public @NotNull RuntimeException createError(@NotNull @NonNls String message, @Nullable Throwable error, @NotNull PluginId pluginId, @Nullable Map<String, String> attachments) {
+    return null;
+  }
+
+  @Override
+  public @NotNull <T> Class<T> loadClass(@NotNull String className, @NotNull PluginDescriptor pluginDescriptor) throws ClassNotFoundException {
+    return null;
+  }
+
+  @Override
+  public @NotNull ActivityCategory getActivityCategory(boolean isExtension) {
     return null;
   }
 
