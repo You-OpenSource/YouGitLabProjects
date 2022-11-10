@@ -55,6 +55,31 @@
         <!-- Add your project components here -->
     </project-components>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="com.github.youopensource.redhat.devtools.intellij.telemetry.core.service.TelemetryServiceFactory"/>
+        <projectService serviceImplementation="com.github.youopensource.yougitlab.services.MyProjectService"/>
+        <applicationService serviceImplementation="com.github.youopensource.yougitlab.services.YouPreferences"/>
+    </extensions>
+
+
+    <applicationListeners>
+        <listener class="com.github.youopensource.yougitlab.services.listeners.MyProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.github.youopensource.redhat.devtools.intellij.telemetry.ui.preferences.TelemetryConfigurable"
+                id="tools.preferences.youidesearch.telemetry"
+                displayName="YouIDESearch Telemetry"/>
+        <toolWindow id="You.com" secondary="true" icon="com.github.youopensource.yougitlab.YouIcons.YouLogo" anchor="right"
+                    factoryClass="com.github.youopensource.yougitlab.screen.SideSuggestionViewFactory"/>
+    </extensions>
+
+
     <actions>
         <action id="Gitlab.Share" class="com.github.yougitlabprojects.share.GitLabShareAction">
             <add-to-group group-id="Vcs.Import"/>
