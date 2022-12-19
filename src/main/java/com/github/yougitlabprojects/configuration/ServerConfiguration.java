@@ -168,7 +168,7 @@ public class ServerConfiguration extends DialogWrapper {
         StringBuilder helpUrl = new StringBuilder();
         helpUrl.append(hostText);
         if (!hostText.endsWith("/")) {
-            helpUrl.append("/");
+            helpUrl.append("~/");
         }
         helpUrl.append("profile/personal_access_tokens");
         return helpUrl.toString();

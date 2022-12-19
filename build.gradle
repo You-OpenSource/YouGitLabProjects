@@ -21,7 +21,7 @@ intellij {
 }
 
 group 'com.you'
-version '2.0.6'
+version '2.0.8'
 
 repositories {
   mavenCentral()
@@ -66,11 +66,11 @@ dependencies {
   implementation('org.gitlab:java-gitlab-api:4.1.1')
   implementation('commons-io:commons-io:2.6')
 
-  implementation 'org.projectlombok:lombok:1.18.12'
-  annotationProcessor 'org.projectlombok:lombok:1.18.12'
+  implementation 'org.projectlombok:lombok:1.18.22'
+  annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-  testImplementation 'org.projectlombok:lombok:1.18.12'
-  testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  testImplementation 'org.projectlombok:lombok:1.18.22'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 
 
   testImplementation(
