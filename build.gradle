@@ -1,25 +1,160 @@
+import java.util.stream.Collectors
+
 plugins {
-    id "org.jetbrains.intellij" version "0.2.13"
-    id 'io.franzbecker.gradle-lombok' version '1.14'
+  id('java')
+  id('org.jetbrains.intellij') version '1.10.0-SNAPSHOT'
+  id("org.jetbrains.kotlin.jvm") version "1.7.20-RC"
+  id('com.adarshr.test-logger') version '3.1.0'
+  // Gradle Changelog Plugin
+  id("org.jetbrains.changelog") version "1.3.1"
+  // Gradle Qodana Plugin
+  id("org.jetbrains.qodana") version "0.1.13"
 }
 
 intellij {
-    version 'IC-2018.1'
-    updateSinceUntilBuild false
-    plugins 'git4idea'
-    pluginName 'GitLabProjects'
+  version = '2022.2.3'
+  type = "IC"
+  updateSinceUntilBuild = false
+  plugins = ['git4idea']
+  downloadSources = true
+  updateSinceUntilBuild = false
 }
 
-lombok {
-    version = '1.18.2'
-    sha256 = ""
-}
+group 'com.you'
+version '2.0.8'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
+  maven {
+    url "https://www.jetbrains.com/intellij-repository/releases"
+  }
+  maven {
+    url "https://www.jetbrains.com/intellij-repository/snapshots"
+  }
+  maven { url "https://cache-redirector.jetbrains.com/intellij-dependencies" }
+  maven {
+    url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
+  }
+  maven {
+    url 'https://repository.jboss.org/nexus/content/groups/public'
+  }
+  maven {
+    url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+  }
 }
 
+def remoteRobotVersion = "0.11.16"
+def intellijVersion = "2022.2.3"
+def intellijPro = false
+
+
 dependencies {
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'org.gitlab', name: 'java-gitlab-api', version: '4.0.0'
+  implementation('io.sentry:sentry:6.4.1') {
+    exclude group: 'org.slf4j'
+  }
+
+  implementation(
+    'net.lingala.zip4j:zip4j:2.11.1',
+    'commons-io:commons-io:2.11.0',
+  )
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+  implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+  implementation("com.segment.analytics.java:analytics:2.1.1")
+  implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
+  implementation('org.gitlab:java-gitlab-api:4.1.1')
+  implementation('commons-io:commons-io:2.6')
+
+  implementation 'org.projectlombok:lombok:1.18.22'
+  annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+  testImplementation 'org.projectlombok:lombok:1.18.22'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+
+  testImplementation(
+    'com.intellij.remoterobot:remote-robot:' + remoteRobotVersion,
+    'com.intellij.remoterobot:remote-fixtures:' + remoteRobotVersion,
+    'com.squareup.okhttp3:logging-interceptor:4.10.0',
+    "com.redhat.devtools.intellij:intellij-common:1.1.0",
+    'org.junit.jupiter:junit-jupiter-api:5.9.0',
+    'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.2.0',
+    'com.automation-remarks:video-recorder-junit5:2.0',
+    'org.mock-server:mockserver-netty:5.14.0',
+    'org.mock-server:mockserver-client-java:5.14.0:shaded',
+    'org.assertj:assertj-core:3.23.1',
+    'org.powermock:powermock-core:2.0.9',
+    'org.mockito:mockito-inline:4.7.0',
+    'org.mockito:mockito-junit-jupiter:4.7.0'
+  )
+  testRuntimeOnly(
+    'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+  )
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/main/java'
+    }
+    kotlin {
+      srcDir 'src/main/java'
+    }
+    resources {
+      srcDir 'src/main/resources'
+    }
+  }
+  test {
+    java {
+      srcDir 'tests/java'
+    }
+    kotlin {
+      srcDir 'tests/kotlin'
+    }
+    resources {
+      srcDir 'tests/resources'
+    }
+  }
+}
+
+
+test {
+  useJUnitPlatform()
+}
+
+downloadRobotServerPlugin {
+  version.set(remoteRobotVersion)
+}
+
+runIdeForUiTests {
+  systemProperty "robot-server.port", "8082"
+  systemProperty "ide.mac.message.dialogs.as.sheets", "false"
+  systemProperty "jb.privacy.policy.text", "<!--999.999-->"
+  systemProperty "jb.consents.confirmation.enabled", "false"
+  systemProperty "ide.mac.file.chooser.native", "false"
+  systemProperty "apple.laf.useScreenMenuBar", "false"
+  systemProperty "idea.trust.all.projects", "true"
+  systemProperty "ide.show.tips.on.startup.default.value", "false"
+}
+
+publishPlugin {
+  token.set(System.getenv("PUBLISH_TOKEN"))
+}
+
+runPluginVerifier {
+  ideVersions = ["IU-223.7571.4", "IU-222.3739.54", "IU-211.7628.21", "IU-212.5712.43 ", "IU-213.7172.25", "IU-221.5080.93", "IU-203.8084.24"]
+}
+
+tasks.processResources {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+runIde {
+  jvmArgs '-Xmx8G'
+  maxHeapSize = "8g"
+}
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
