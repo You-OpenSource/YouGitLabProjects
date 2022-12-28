@@ -18,7 +18,7 @@ import com.intellij.util.containers.Convertor;
 import git4idea.GitUtil;
 import git4idea.commands.GitCommand;
 import git4idea.commands.GitSimpleHandler;
-import git4idea.config.GitVcsApplicationSettings;
+import git4idea.config.GitExecutableManager;
 import git4idea.config.GitVersion;
 import git4idea.repo.GitRemote;
 import git4idea.repo.GitRepository;
@@ -145,11 +145,9 @@ public class GitLabUtil {
     }
 
     public static boolean testGitExecutable(final Project project) {
-        final GitVcsApplicationSettings settings = GitVcsApplicationSettings.getInstance();
-        final String executable = settings.getPathToGit();
         final GitVersion version;
         try {
-            version = GitVersion.identifyVersion(executable);
+            version = GitExecutableManager.getInstance().getVersion(project);
         } catch (Exception e) {
             MessageUtil.showErrorDialog(project, "Cannot find git executable.", "Cannot Find Git");
             return false;
