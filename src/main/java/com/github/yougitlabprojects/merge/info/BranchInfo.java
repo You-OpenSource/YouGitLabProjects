@@ -18,7 +18,6 @@ public class BranchInfo {
 
     public BranchInfo(GitLocalBranch gitLocalBranch) {
         this.name = gitLocalBranch.getName();
-
     }
 
     public BranchInfo(String name, String remoteName) {
