@@ -1,5 +1,7 @@
 package com.github.yougitlabprojects.merge.info;
 
+import git4idea.GitLocalBranch;
+
 import java.util.Objects;
 
 /**
@@ -13,6 +15,11 @@ public class BranchInfo {
     private String name;
     private String remoteName;
     private boolean remoteOnly = false;
+
+    public BranchInfo(GitLocalBranch gitLocalBranch) {
+        this.name = gitLocalBranch.getName();
+
+    }
 
     public BranchInfo(String name, String remoteName) {
         this(name, remoteName, false);

@@ -2,12 +2,12 @@ package com.github.yougitlabprojects.merge.request;
 
 import com.github.yougitlabprojects.component.SearchBoxModel;
 import com.github.yougitlabprojects.configuration.ProjectState;
+import com.github.yougitlabprojects.merge.info.BranchInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.SortedComboBoxModel;
-import com.github.yougitlabprojects.merge.info.BranchInfo;
 import org.apache.commons.lang.StringUtils;
 import org.gitlab.api.models.GitlabUser;
 import org.jetbrains.annotations.NotNull;
@@ -66,14 +66,14 @@ public class CreateMergeRequestDialog extends DialogWrapper {
         assigneeBox.setBounds(140, 170, 180, 20);
 
         currentBranchModel = new SortedComboBoxModel<>((o1, o2) -> StringUtil.naturalCompare(o1.getName(), o2.getName()));
-        currentBranchModel.setAll(mergeRequestWorker.getBranches());
+        currentBranchModel.setAll(mergeRequestWorker.getLocalBranches());
 
         String currentBranchName = mergeRequestWorker.getGitLocalBranch().getName();
         currentBranch.setModel(currentBranchModel);
-        currentBranchModel.getItems().stream().filter(b -> currentBranchName.equals(b.getName())).findFirst().ifPresent(b -> currentBranch.setSelectedItem(b));
+        currentBranchModel.getItems().stream().filter(b -> currentBranchName.equals(b.getName())).findFirst().ifPresent( b -> currentBranch.setSelectedItem(b));
 
         targetBranchModel = new SortedComboBoxModel<>((o1, o2) -> StringUtil.naturalCompare(o1.getName(), o2.getName()));
-        targetBranchModel.setAll(mergeRequestWorker.getBranches());
+        targetBranchModel.setAll(mergeRequestWorker.getRemoteBranches());
         targetBranch.setModel(targetBranchModel);
         targetBranch.setSelectedIndex(0);
         if (mergeRequestWorker.getLastUsedBranch() != null) {

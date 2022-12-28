@@ -20,6 +20,7 @@ import com.github.yougitlabprojects.merge.GitLabMergeRequestWorker;
 import com.github.yougitlabprojects.merge.info.BranchInfo;
 import com.github.yougitlabprojects.merge.info.DiffInfo;
 import git4idea.GitLocalBranch;
+import git4idea.branch.GitBranchesCollection;
 import git4idea.commands.Git;
 import git4idea.commands.GitCommandResult;
 import git4idea.repo.GitRepository;
@@ -32,7 +33,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * GitLab Create Merge request worker
@@ -58,7 +61,8 @@ public class GitLabCreateMergeRequestWorker implements GitLabMergeRequestWorker 
 
     private GitLocalBranch gitLocalBranch;
     private BranchInfo localBranchInfo;
-    private List<BranchInfo> branches;
+    private List<BranchInfo> remoteBranches;
+    private List<BranchInfo> localBranches;
     private BranchInfo lastUsedBranch;
     private SearchableUsers searchableUsers;
 
@@ -177,6 +181,12 @@ public class GitLabCreateMergeRequestWorker implements GitLabMergeRequestWorker 
                 }
                 mergeRequestWorker.setGitLocalBranch(currentBranch);
 
+                GitBranchesCollection localBranches = mergeRequestWorker.getGitRepository().getBranches();
+
+                mergeRequestWorker.setLocalBranches(localBranches.getLocalBranches().stream()
+                        .map(BranchInfo::new)
+                        .collect(Collectors.toList()));
+
                 String lastMergedBranch = mergeRequestWorker.getProjectState().getLastMergedBranch();
 
                 try {
@@ -191,7 +201,7 @@ public class GitLabCreateMergeRequestWorker implements GitLabMergeRequestWorker 
                         }
                         branchInfos.add(branchInfo);
                     }
-                    mergeRequestWorker.setBranches(branchInfos);
+                    mergeRequestWorker.setRemoteBranches(branchInfos);
                 } catch (Exception e) {
                     MessageUtil.showErrorDialog(project, "Cannot list GitLab branches", CANNOT_CREATE_MERGE_REQUEST);
                     return null;
@@ -305,12 +315,20 @@ public class GitLabCreateMergeRequestWorker implements GitLabMergeRequestWorker 
         this.localBranchInfo = localBranchInfo;
     }
 
-    public List<BranchInfo> getBranches() {
-        return branches;
+    public List<BranchInfo> getRemoteBranches() {
+        return remoteBranches;
     }
 
-    public void setBranches(List<BranchInfo> branches) {
-        this.branches = branches;
+    public List<BranchInfo> getLocalBranches() {
+        return localBranches;
+    }
+
+    public void setLocalBranches(List<BranchInfo> localBranches) {
+        this.localBranches = localBranches;
+    }
+
+    public void setRemoteBranches(List<BranchInfo> remoteBranches) {
+        this.remoteBranches = remoteBranches;
     }
 
     public BranchInfo getLastUsedBranch() {
