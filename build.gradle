@@ -21,7 +21,7 @@ intellij {
 }
 
 group 'com.you'
-version '2.0.8'
+version '2.1.1'
 
 repositories {
   mavenCentral()

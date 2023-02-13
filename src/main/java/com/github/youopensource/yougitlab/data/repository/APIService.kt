@@ -7,6 +7,7 @@ import retrofit2.http.*
 
 interface APIService {
     @GET("generic?service=codesnippets&version=1&fields=snippet_code%2Curl")
+    @Headers("user-agent: youide")
     fun getApiResult(
         @Query("query") queryId: String?,
         @Query("size") sizeId: Int,
